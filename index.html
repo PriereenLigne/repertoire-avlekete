@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Répertoire Numérique de la Jeunesse – Avlékété</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{--gd:#1a3d2b;--gm:#2d6a4f;--gl:#52b788;--go:#d4a843;--gl2:#f0c060;--cr:#faf6ef;--cd:#f0e8d8;--td:#1a1a1a;--tm:#3d3d3d;--tl:#6b7280;--wh:#ffffff;--rd:#c0392b;--bl:#1e6091;--sh:0 4px 24px rgba(26,61,43,.10);--sl:0 8px 40px rgba(26,61,43,.16);--r:12px;--rl:20px}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--cr);color:var(--td);min-height:100vh}
+    /* NAV */
+    .nav{position:sticky;top:0;z-index:100;background:var(--gd);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:64px;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+    .nav-brand{display:flex;align-items:center;gap:12px;cursor:pointer}
+    .nav-logo{width:38px;height:38px;border-radius:8px;background:var(--go);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--gd);font-size:18px}
+    .nav-title{color:#fff;font-weight:600;font-size:15px;line-height:1.2}
+    .nav-sub{color:var(--gl);font-size:12px;font-weight:300}
+    .nav-links{display:flex;gap:8px;align-items:center}
+    .nav-btn{padding:8px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .2s;font-family:'DM Sans',sans-serif}
+    .nb-ghost{background:transparent;color:var(--cd)}.nb-ghost:hover{background:rgba(255,255,255,.08);color:#fff}
+    .nb-gold{background:var(--go);color:var(--gd)}.nb-gold:hover{background:var(--gl2)}
+    .nav-user{display:flex;align-items:center;gap:10px;color:#fff;font-size:14px}
+    .nav-av{width:34px;height:34px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-weight:600;color:#fff;font-size:13px;cursor:pointer}
+    /* HERO */
+    .hero{background:linear-gradient(135deg,var(--gd) 0%,var(--gm) 60%,#1a5c3a 100%);padding:80px 2rem 100px;text-align:center;position:relative;overflow:hidden}
+    .hero::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E")}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,168,67,.15);border:1px solid rgba(212,168,67,.3);color:var(--gl2);padding:6px 16px;border-radius:100px;font-size:13px;font-weight:500;margin-bottom:24px}
+    .hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);color:#fff;line-height:1.15;margin-bottom:20px}
+    .hero h1 span{color:var(--gl2)}
+    .hero p{color:rgba(255,255,255,.75);font-size:17px;max-width:580px;margin:0 auto 40px;line-height:1.7;font-weight:300}
+    .hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+    .btn-primary{background:var(--go);color:var(--gd);padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;box-shadow:0 4px 16px rgba(212,168,67,.35)}
+    .btn-primary:hover{background:var(--gl2);transform:translateY(-1px)}
+    .btn-outline{background:transparent;color:#fff;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:500;border:2px solid rgba(255,255,255,.3);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s}
+    .btn-outline:hover{border-color:#fff;background:rgba(255,255,255,.08)}
+    /* STATS */
+    .stats-bar{background:#fff;margin:-40px 2rem 0;border-radius:var(--rl);box-shadow:var(--sl);padding:28px 36px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:24px;position:relative;z-index:10}
+    .stat-num{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gd);font-weight:700}
+    .stat-lbl{font-size:13px;color:var(--tl);margin-top:2px}
+    .stat-div{width:1px;background:var(--cd)}
+    /* LAYOUT */
+    .page{max-width:1200px;margin:0 auto;padding:0 1.5rem}
+    .section{padding:48px 0}
+    .sec-title{font-family:'Playfair Display',serif;font-size:1.75rem;color:var(--gd);margin-bottom:8px}
+    .sec-sub{color:var(--tl);font-size:15px;margin-bottom:32px}
+    /* CARDS */
+    .card{background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:24px;border:1px solid rgba(0,0,0,.04)}
+    .card-t{font-weight:600;font-size:16px;margin-bottom:4px;color:var(--td)}
+    .card-s{font-size:13px;color:var(--tl);margin-bottom:20px}
+    /* GRID */
+    .g2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+    .g3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    @media(max-width:768px){.g2,.g3{grid-template-columns:1fr}}
+    /* FORM */
+    .fsec{font-size:13px;font-weight:600;color:var(--gm);text-transform:uppercase;letter-spacing:.08em;padding:16px 0 10px;border-bottom:1px solid var(--cd);margin-bottom:20px}
+    .fg{margin-bottom:18px}
+    .fl{display:block;font-size:13px;font-weight:500;color:var(--tm);margin-bottom:6px}
+    .fl span{color:var(--rd);margin-left:2px}
+    .fi,.fs,.fta{width:100%;padding:11px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;color:var(--td);background:#fff;transition:border-color .2s;outline:none}
+    .fi:focus,.fs:focus,.fta:focus{border-color:var(--gl);box-shadow:0 0 0 3px rgba(82,183,136,.1)}
+    .fi.er,.fs.er{border-color:var(--rd)}
+    .fe{font-size:12px;color:var(--rd);margin-top:4px}
+    .fta{resize:vertical;min-height:90px}
+    .fh{font-size:12px;color:var(--tl);margin-top:4px}
+    /* UPLOAD */
+    .upz{border:2px dashed #d1d5db;border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;background:var(--cr)}
+    .upz:hover{border-color:var(--gl);background:rgba(82,183,136,.04)}
+    .file-chip{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(82,183,136,.1);border-radius:100px;font-size:13px;color:var(--gm);margin:4px}
+    .file-x{cursor:pointer;color:var(--rd);font-weight:700}
+    /* PROFILE CARD */
+    .pc{background:#fff;border-radius:var(--r);box-shadow:var(--sh);overflow:hidden;border:1px solid rgba(0,0,0,.04);transition:box-shadow .2s}
+    .pc:hover{box-shadow:var(--sl)}
+    .pc-h{background:linear-gradient(135deg,var(--gd),var(--gm));padding:20px;display:flex;align-items:center;gap:16px}
+    .pc-av{width:52px;height:52px;border-radius:50%;background:var(--go);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;color:var(--gd);font-size:20px;flex-shrink:0;border:3px solid rgba(255,255,255,.2)}
+    .pc-name{color:#fff;font-weight:600;font-size:15px}
+    .pc-vil{color:rgba(255,255,255,.65);font-size:13px;margin-top:2px}
+    .pc-body{padding:16px 20px}
+    .badge{display:inline-flex;padding:4px 12px;border-radius:100px;font-size:12px;font-weight:500;margin-bottom:12px}
+    .b-emp{background:#d1fae5;color:#065f46}.b-chom{background:#fee2e2;color:#991b1b}
+    .b-stg{background:#dbeafe;color:#1e40af}.b-aut{background:#f3f4f6;color:#374151}
+    /* DASHBOARD */
+    .dash-hd{background:linear-gradient(135deg,var(--gd) 0%,var(--gm) 100%);padding:32px 2rem 52px}
+    .dash-t{font-family:'Playfair Display',serif;font-size:1.8rem;color:#fff}
+    .dash-s{color:rgba(255,255,255,.65);font-size:14px;margin-top:4px}
+    .kpi-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+    .kpi{background:#fff;border-radius:var(--r);padding:20px;box-shadow:var(--sh);border-left:4px solid var(--gl)}
+    .kpi.gold{border-left-color:var(--go)}.kpi.blue{border-left-color:var(--bl)}
+    .kpi.red{border-left-color:var(--rd)}.kpi.pink{border-left-color:#be185d}.kpi.amb{border-left-color:#f59e0b}
+    .kpi-ic{width:40px;height:40px;border-radius:10px;background:rgba(82,183,136,.1);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+    .kpi.gold .kpi-ic{background:rgba(212,168,67,.1)}.kpi.blue .kpi-ic{background:rgba(30,96,145,.1)}
+    .kpi.red .kpi-ic{background:rgba(192,57,43,.1)}.kpi.pink .kpi-ic{background:rgba(190,24,93,.1)}
+    .kpi-v{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:var(--gd)}
+    .kpi-l{font-size:13px;color:var(--tl);margin-top:2px}
+    .kpi-tr{font-size:12px;color:var(--gl);font-weight:500;margin-top:8px}
+    /* TABLE */
+    .tw{overflow-x:auto;border-radius:var(--r)}
+    table{width:100%;border-collapse:collapse;font-size:14px}
+    th{background:var(--cd);color:var(--tm);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:12px 16px;text-align:left}
+    td{padding:14px 16px;border-bottom:1px solid #f3f4f6;vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:var(--cr)}
+    /* SEARCH */
+    .sb{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:20px}
+    .si-w{position:relative;flex:1;min-width:240px}
+    .si-ic{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--tl);font-size:16px}
+    .si{width:100%;padding:10px 14px 10px 38px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+    .si:focus{border-color:var(--gl)}
+    .fsel{padding:10px 14px;border:1.5px solid #e5e7eb;border-radius:8px;font-size:14px;font-family:'DM Sans',sans-serif;background:#fff;cursor:pointer;outline:none}
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:all .2s}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .btn-g{background:var(--gm);color:#fff}.btn-g:hover:not(:disabled){background:var(--gd)}
+    .btn-go{background:var(--go);color:var(--gd)}.btn-go:hover:not(:disabled){background:var(--gl2)}
+    .btn-sm{padding:6px 14px;font-size:13px}
+    .btn-d{background:#fee2e2;color:var(--rd)}.btn-d:hover{background:#fecaca}
+    .btn-gh{background:rgba(45,106,79,.08);color:var(--gm);border:1px solid rgba(45,106,79,.15)}.btn-gh:hover{background:rgba(45,106,79,.15)}
+    .btn-b{background:var(--bl);color:#fff}.btn-b:hover{background:#155074}
+    .btn-wa{background:#25d366;color:#fff}.btn-wa:hover{background:#1da851}
+    /* TABS */
+    .tabs{display:flex;gap:4px;background:var(--cd);padding:4px;border-radius:10px;width:fit-content;margin-bottom:24px;flex-wrap:wrap}
+    .tab{padding:8px 18px;border-radius:8px;font-size:14px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--tl);font-family:'DM Sans',sans-serif;transition:all .2s}
+    .tab.on{background:#fff;color:var(--gd);box-shadow:var(--sh)}
+    /* MODAL */
+    .mo{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px)}
+    .md{background:#fff;border-radius:var(--rl);width:100%;max-width:680px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+    .md-h{padding:24px 28px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:1;border-bottom:1px solid var(--cd)}
+    .md-t{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--gd)}
+    .md-x{background:none;border:none;font-size:22px;cursor:pointer;color:var(--tl)}
+    .md-b{padding:24px 28px 28px}
+    /* TOAST */
+    .tc{position:fixed;bottom:24px;right:24px;z-index:300;display:flex;flex-direction:column;gap:10px}
+    .toast{background:var(--gd);color:#fff;padding:14px 20px;border-radius:10px;font-size:14px;box-shadow:var(--sl);display:flex;align-items:center;gap:10px;animation:sIn .3s ease}
+    .toast.err{background:var(--rd)}.toast.ok{background:#065f46}
+    @keyframes sIn{from{transform:translateX(100px);opacity:0}to{transform:translateX(0);opacity:1}}
+    /* MISC */
+    .vc{display:inline-flex;align-items:center;gap:6px;background:rgba(26,61,43,.08);color:var(--gd);padding:4px 12px;border-radius:100px;font-size:12px;font-weight:500}
+    .steps{display:flex;margin-bottom:36px}
+    .step{flex:1;display:flex;flex-direction:column;align-items:center;position:relative}
+    .step::after{content:'';position:absolute;top:18px;left:50%;width:100%;height:2px;background:var(--cd);z-index:0}
+    .step:last-child::after{display:none}
+    .step-c{width:36px;height:36px;border-radius:50%;background:var(--cd);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:var(--tl);position:relative;z-index:1;transition:all .3s}
+    .step.on .step-c{background:var(--gm);color:#fff}.step.dn .step-c{background:var(--gl);color:#fff}
+    .step-l{font-size:12px;color:var(--tl);margin-top:6px;text-align:center}
+    .step.on .step-l{color:var(--gm);font-weight:600}
+    .lp{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--gd) 0%,var(--gm) 100%);padding:1.5rem}
+    .lc{background:#fff;border-radius:var(--rl);padding:40px;width:100%;max-width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+    .ll{text-align:center;margin-bottom:28px}
+    .ll-ic{width:64px;height:64px;border-radius:16px;background:var(--gd);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-family:'Playfair Display',serif;font-weight:700;color:var(--go);font-size:28px}
+    .ll-t{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--gd);text-align:center}
+    .ll-s{font-size:13px;color:var(--tl);text-align:center;margin-top:4px;margin-bottom:28px}
+    .rt{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:24px}
+    .rt-t{padding:12px;border-radius:8px;border:2px solid var(--cd);text-align:center;cursor:pointer;transition:all .2s;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500}
+    .rt-t.on{border-color:var(--gm);background:rgba(45,106,79,.06);color:var(--gm)}
+    .rt-ic{font-size:22px;margin-bottom:4px}
+    .es{text-align:center;padding:60px 20px}
+    .sp{width:24px;height:24px;border:3px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;display:inline-block}
+    .sp.dk{border-color:rgba(45,106,79,.2);border-top-color:var(--gm)}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .cc{display:flex;flex-direction:column;height:420px;border:1.5px solid #e5e7eb;border-radius:12px;overflow:hidden}
+    .cm{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:#f9fafb}
+    .cb{max-width:75%;padding:10px 14px;border-radius:14px;font-size:14px;line-height:1.5}
+    .cb.s{background:var(--gm);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
+    .cb.r{background:#fff;color:var(--td);align-self:flex-start;border-bottom-left-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+    .cb-m{font-size:11px;opacity:.65;margin-top:4px}
+    .ci-r{display:flex;gap:8px;padding:12px;background:#fff;border-top:1px solid #e5e7eb}
+    .ci{flex:1;padding:10px 14px;border:1.5px solid #e5e7eb;border-radius:24px;font-size:14px;font-family:'DM Sans',sans-serif;outline:none}
+    .ci:focus{border-color:var(--gl)}
+    .nc{background:var(--rd);color:#fff;font-size:10px;font-weight:700;border-radius:100px;padding:1px 6px}
+    .sb-adm{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:100px;font-size:12px;font-weight:600;background:rgba(192,57,43,.1);color:var(--rd);border:1px solid rgba(192,57,43,.2)}
+    .act-i{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid #f3f4f6}
+    .act-i:last-child{border-bottom:none}
+    .act-d{width:8px;height:8px;border-radius:50%;background:var(--gl);margin-top:6px;flex-shrink:0}
+    .inb{display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;cursor:pointer;transition:background .15s}
+    .inb:hover{background:var(--cr)}.inb.ur{background:rgba(82,183,136,.06)}
+    .al{background:linear-gradient(135deg,#7f1d1d,#991b1b);color:#fff;padding:12px 20px;border-radius:10px;font-size:14px;display:flex;align-items:center;gap:10px;margin-bottom:20px}
+    @media(max-width:640px){.nav{padding:0 1rem}.hero{padding:48px 1rem 80px}.stats-bar{margin:-32px 1rem 0;padding:20px}.stat-div{display:none}}
+    ::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:var(--cr)}::-webkit-scrollbar-thumb{background:var(--gl);border-radius:3px}
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef, useCallback } = React;
+
+// ┌────────────────────────────────────────────────────────────┐
+// │  ⚙️  UNE SEULE LIGNE À CONFIGURER                          │
+// │  Collez ici l'URL de votre Firebase Realtime Database      │
+// └────────────────────────────────────────────────────────────┘
+const FB_DB = 'https://VOTRE-PROJET.firebaseio.com';
+// ─────────────────────────────────────────────────────────────
+
+const IS_CFG = !FB_DB.includes('VOTRE');
+
+/* ─── Admins (jamais en base) ─── */
+const ADMINS = [
+  { id:'a1', username:'admin',         password:'@Vleketé_2026', nom:'Administrateur Principal', role:'admin' },
+  { id:'a2', username:'resp.avlekete', password:'@Vleketé_2026', nom:'Responsable Avlékété',     role:'admin' },
+];
+
+/* ─── Constantes ─── */
+const NIVEAUX    = ['Sans diplôme','Primaire','Collège (BEPC)','Lycée (BAC)','BTS / DUT','Licence','Master','Doctorat','Formation professionnelle'];
+const SITUATIONS = ['Emploi salarié','Emploi indépendant','Chômage','Stage','Formation','Inactif'];
+const PROFESSIONS= ['Agriculture / Élevage','Artisanat','BTP / Construction','Commerce / Vente','Éducation / Enseignement','Finance / Banque','Informatique / Tech','Médecine / Santé','Pêche / Aquaculture','Restauration / Hôtellerie','Transport / Logistique','Couture / Mode','Coiffure / Esthétique','Mécanique','Autre'];
+const VILLES_DEF = ['Adounko','Adounko Ayignon','Agbanzin-Kpota','Agbanzin-Kpota Zounvlamè','Agouin','Ahouandji-Avlékété','Avlékété','Hio','Hio Vinawa'];
+
+/* ─── Crypto SHA-256 ─── */
+async function hashPwd(p){ const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p+':avl!')); return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+function f2b64(f){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f);});}
+
+/* ─── Session ─── */
+const S={
+  get:()=>{try{const v=sessionStorage.getItem('avl');return v?JSON.parse(v):null;}catch{return null;}},
+  set:v=>{try{sessionStorage.setItem('avl',JSON.stringify(v));}catch{}},
+  del:()=>{try{sessionStorage.removeItem('avl');}catch{}}
+};
+
+/* ─── Utils ─── */
+const fmtD=s=>{if(!s)return'—';return new Date(s).toLocaleDateString('fr-FR',{day:'2-digit',month:'long',year:'numeric'});};
+const age=d=>{if(!d)return'—';return Math.floor((Date.now()-new Date(d))/(365.25*24*3600*1000));};
+const waL=t=>'https://wa.me/229'+(t||'').replace(/\D/g,'');
+const bcl=s=>({'Emploi salarié':'b-emp','Emploi indépendant':'b-emp','Chômage':'b-chom','Stage':'b-stg','Formation':'b-stg','Inactif':'b-aut'})[s]||'b-aut';
+const toArr=o=>o?Object.entries(o).map(([id,d])=>({id,...d})):[];
+
+/* ─── API Firebase REST (aucun SDK, juste fetch) ─── */
+async function fb(method,path,body){
+  const opts={method,headers:{'Content-Type':'application/json'}};
+  if(body!==undefined)opts.body=JSON.stringify(body);
+  const r=await fetch(`${FB_DB}/${path}.json`,opts);
+  if(!r.ok){const t=await r.text();throw new Error(`${r.status}: ${t}`);}
+  return r.json();
+}
+
+const DB={
+  /* JEUNES */
+  async getJeunes(){const d=await fb('GET','jeunes');return toArr(d).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));},
+  async addJeune(j){const p={...j,createdAt:new Date().toISOString()};const{name}=await fb('POST','jeunes',p);return{id:name,...p};},
+  async updJeune(id,u){await fb('PATCH',`jeunes/${id}`,u);const d=await fb('GET',`jeunes/${id}`);return{id,...d};},
+  async delJeune(id){await fb('DELETE',`jeunes/${id}`);},
+  /* COMPTES */
+  async findAccount(cip){const d=await fb('GET','accounts');return toArr(d).find(a=>a.cip===cip)||null;},
+  async addAccount(a){await fb('POST','accounts',a);},
+  /* MESSAGES */
+  async getMessages(){const d=await fb('GET','messages');return toArr(d).sort((a,b)=>new Date(a.at)-new Date(b.at));},
+  async addMsg(m){const p={...m,at:new Date().toISOString()};const{name}=await fb('POST','messages',p);return{id:name,...p};},
+  async patchMsg(id,u){await fb('PATCH',`messages/${id}`,u);},
+  /* VILLAGES */
+  async getVillages(){const d=await fb('GET','villages');return toArr(d).sort((a,b)=>a.nom.localeCompare(b.nom));},
+  async addVillage(nom){await fb('POST','villages',{nom});},
+  async delVillage(id){await fb('DELETE',`villages/${id}`);},
+  /* JOURNAL */
+  async log(msg,type='info'){await fb('POST','activity_log',{msg,type,at:new Date().toISOString()}).catch(()=>{});},
+  async getLogs(){const d=await fb('GET','activity_log');return toArr(d).sort((a,b)=>new Date(b.at)-new Date(a.at)).slice(0,100);},
+  /* INIT */
+  async init(){
+    const[j,v,m]=await Promise.all([fb('GET','jeunes'),fb('GET','villages'),fb('GET','messages')]);
+    let vArr=toArr(v);
+    if(!vArr.length){
+      await Promise.all(VILLES_DEF.map(nom=>fb('POST','villages',{nom})));
+      const vNew=await fb('GET','villages');
+      vArr=toArr(vNew);
+    }
+    return{jeunes:toArr(j).sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt)),villages:vArr,messages:toArr(m).sort((a,b)=>new Date(a.at)-new Date(b.at))};
+  }
+};
+
+/* ══════════════ ÉCRANS SYSTÈME ══════════════ */
+function SetupScreen(){
+  return(
+    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#1a3d2b,#2d6a4f)',padding:'1.5rem'}}>
+      <div style={{background:'#fff',borderRadius:20,padding:40,maxWidth:580,width:'100%',boxShadow:'0 20px 60px rgba(0,0,0,.3)'}}>
+        <div style={{textAlign:'center',marginBottom:28}}>
+          <div style={{width:64,height:64,borderRadius:16,background:'#1a3d2b',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 14px',fontSize:28,fontWeight:700,color:'#d4a843',fontFamily:'Playfair Display,serif'}}>A</div>
+          <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.6rem',color:'#1a3d2b'}}>Configuration — 3 minutes</div>
+          <div style={{color:'#6b7280',fontSize:14,marginTop:6}}>Une seule URL à copier-coller</div>
+        </div>
+        <div style={{background:'#f0fdf4',border:'1px solid #a7f3d0',borderRadius:12,padding:20,marginBottom:20}}>
+          {[
+            ['1','Aller sur ','console.firebase.google.com',' → Créer un projet (cliquez continuer 2× sans analytics)'],
+            ['2','Menu gauche → Build → Realtime Database → Créer une base → Mode test → Activer'],
+            ['3','Copier l\'URL affichée (ex: https://mon-projet.firebaseio.com)'],
+            ['4','Ouvrir index.html et coller l\'URL ligne 24 → sauvegarder'],
+            ['5','Sur vercel.com → Add New → drag & drop ce dossier → Deploy'],
+          ].map(([n,t,l,t2])=>(
+            <div key={n} style={{display:'flex',gap:12,marginBottom:12,alignItems:'flex-start'}}>
+              <span style={{width:26,height:26,minWidth:26,borderRadius:'50%',background:'#2d6a4f',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontSize:12,fontWeight:700}}>{n}</span>
+              <span style={{fontSize:14,color:'#374151',lineHeight:1.6}}>{t}{l&&<a href={'https://'+l} target="_blank" rel="noopener noreferrer" style={{color:'#2d6a4f',fontWeight:700}}>{l}</a>}{t2}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{background:'#f9fafb',borderRadius:10,padding:16,fontFamily:'monospace',fontSize:13}}>
+          <div style={{color:'#6b7280',marginBottom:6,fontSize:11,textTransform:'uppercase',fontWeight:600,letterSpacing:'.05em'}}>Ligne 24 de index.html :</div>
+          <div style={{color:'#ef4444',marginBottom:8}}>const FB_DB = 'https://VOTRE-PROJET.firebaseio.com';</div>
+          <div style={{color:'#059669'}}>const FB_DB = 'https://mon-projet-rtdb.firebaseio.com';  ✅</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Splash(){
+  return(
+    <div style={{minHeight:'100vh',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,#1a3d2b,#2d6a4f)'}}>
+      <div style={{width:64,height:64,borderRadius:18,background:'rgba(255,255,255,.1)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Playfair Display,serif',fontWeight:700,color:'#d4a843',fontSize:28,marginBottom:28}}>A</div>
+      <div style={{width:36,height:36,border:'4px solid rgba(255,255,255,.25)',borderTopColor:'#fff',borderRadius:'50%',animation:'spin .8s linear infinite'}}></div>
+      <div style={{color:'rgba(255,255,255,.7)',marginTop:18,fontSize:15}}>Chargement…</div>
+    </div>
+  );
+}
+
+function ErrScreen({msg,onRetry}){
+  return(
+    <div style={{minHeight:'100vh',display:'flex',alignItems:'center',justifyContent:'center',background:'#fff7f7',padding:'2rem'}}>
+      <div style={{maxWidth:480,textAlign:'center'}}>
+        <div style={{fontSize:52,marginBottom:16}}>⚠️</div>
+        <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.4rem',color:'#c0392b',marginBottom:12}}>Impossible de se connecter</div>
+        <p style={{color:'#6b7280',lineHeight:1.7,marginBottom:20,fontSize:14}}>{msg}</p>
+        <div style={{background:'#f9fafb',border:'1px solid #e5e7eb',borderRadius:10,padding:14,fontSize:13,textAlign:'left',marginBottom:20}}>
+          · Vérifiez l'URL Firebase (ligne 24 de index.html)<br/>
+          · Vérifiez que la base Firebase est active<br/>
+          · Mode test doit être activé (ou règles ouvertes)
+        </div>
+        <button className="btn btn-g" onClick={onRetry} style={{cursor:'pointer'}}>🔄 Réessayer</button>
+      </div>
+    </div>
+  );
+}
+
+function Toasts({list}){
+  return(
+    <div className="tc">
+      {list.map(t=>(
+        <div key={t.id} className={`toast ${t.type==='error'?'err':t.type==='success'?'ok':''}`}>
+          <span>{t.type==='success'?'✓':t.type==='error'?'✕':'ℹ'}</span>{t.msg}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ══════════════ ROOT ══════════════ */
+function Root(){
+  if(!IS_CFG)return <SetupScreen/>;
+  return <App/>;
+}
+
+/* ══════════════ APP ══════════════ */
+function App(){
+  const [ready,  setReady]  = useState(false);
+  const [dbErr,  setDbErr]  = useState(null);
+  const [ses,    setSes]    = useState(()=>S.get());
+  const [page,   setPage]   = useState('home');
+  const [users,  setUsers]  = useState([]);
+  const [vils,   setVils]   = useState([]);
+  const [msgs,   setMsgs]   = useState([]);
+  const [logs,   setLogs]   = useState([]);
+  const [toasts, setToasts] = useState([]);
+
+  const toast=useCallback((msg,type='success')=>{
+    const id=Date.now();
+    setToasts(ts=>[...ts,{id,msg,type}]);
+    setTimeout(()=>setToasts(ts=>ts.filter(t=>t.id!==id)),4200);
+  },[]);
+
+  const init=useCallback(async()=>{
+    setDbErr(null);setReady(false);
+    try{
+      const{jeunes,villages,messages}=await DB.init();
+      setUsers(jeunes);setVils(villages);setMsgs(messages);
+      setReady(true);
+    }catch(e){setDbErr(e.message||'Erreur de connexion Firebase.');setReady(true);}
+  },[]);
+
+  useEffect(()=>{init();},[]);
+
+  /* AUTH */
+  const login=useCallback(async(ident,pwd,role)=>{
+    if(role==='admin'){
+      const a=ADMINS.find(x=>x.username===ident&&x.password===pwd);
+      if(!a)return false;
+      const s={...a,loggedAt:new Date().toISOString()};
+      setSes(s);S.set(s);
+      DB.log(`Connexion admin : ${a.nom}`,'admin');
+      return true;
+    }
+    try{
+      const acc=await DB.findAccount(ident.trim());
+      if(!acc)return false;
+      const h=await hashPwd(pwd);
+      if(h!==acc.passwordHash)return false;
+      const u=users.find(x=>x.id===acc.userId);
+      if(!u)return false;
+      if(u.status==='rejected')return false;
+      if(u.status==='pending')return 'pending';
+      const s={role:'user',userId:u.id,cip:u.cip,nom:u.nom,prenom:u.prenom,loggedAt:new Date().toISOString()};
+      setSes(s);S.set(s);
+      DB.log(`Connexion : ${u.prenom} ${u.nom}`,'user');
+      return true;
+    }catch(e){console.error(e);return false;}
+  },[users]);
+
+  const logout=useCallback(()=>{S.del();setSes(null);setPage('home');},[]);
+
+  /* MUTATIONS */
+  const doSaveUser=useCallback(async(id,upd)=>{
+    const u=await DB.updJeune(id,upd);
+    setUsers(p=>p.map(x=>x.id===id?u:x));
+    return u;
+  },[]);
+  const doAddUser=useCallback(u=>setUsers(p=>[u,...p]),[]);
+  const doDelUser=useCallback(async id=>{await DB.delJeune(id);setUsers(p=>p.filter(x=>x.id!==id));},[]);
+
+  const doAddVillage=useCallback(async nom=>{await DB.addVillage(nom);const v=await DB.getVillages();setVils(v);},[]);
+  const doDelVillage=useCallback(async id=>{await DB.delVillage(id);setVils(p=>p.filter(x=>x.id!==id));},[]);
+
+  const doAddMsg=useCallback(async pay=>{const m=await DB.addMsg(pay);setMsgs(p=>[...p,m]);return m;},[]);
+  const doReadMsgs=useCallback(async(ids,field)=>{
+    if(!ids.length)return;
+    await Promise.all(ids.map(id=>DB.patchMsg(id,{[field]:true})));
+    setMsgs(p=>p.map(m=>ids.includes(m.id)?{...m,[field]:true}:m));
+  },[]);
+  const doLoadLogs=useCallback(async()=>{const l=await DB.getLogs();setLogs(l);},[]);
+
+  /* RENDU CONDITIONNEL après tous les hooks */
+  if(!ready)return <Splash/>;
+  if(dbErr)return <ErrScreen msg={dbErr} onRetry={init}/>;
+
+  const me=ses?.role==='user'?users.find(u=>u.id===ses.userId):null;
+  const pend=users.filter(u=>u.status==='pending').length;
+  const uAdm=msgs.filter(m=>!m.readByAdmin&&m.from==='user').length;
+  const uMe=me?msgs.filter(m=>m.toUserId===me.id&&!m.readByUser).length:0;
+  const vilNames=vils.map(v=>v.nom);
+
+  function Nav(){
+    return(
+      <nav className="nav">
+        <div className="nav-brand" onClick={()=>setPage('home')}>
+          <div className="nav-logo">A</div>
+          <div><div className="nav-title">Répertoire Avlékété</div><div className="nav-sub">Ouidah · Bénin</div></div>
+        </div>
+        <div className="nav-links">
+          {!ses&&<><button className="nav-btn nb-ghost" onClick={()=>setPage('login')}>Connexion</button><button className="nav-btn nb-gold" onClick={()=>setPage('register')}>S'inscrire</button></>}
+          {ses?.role==='admin'&&<>
+            <button className="nav-btn nb-ghost" onClick={()=>setPage('dashboard')}>
+              Tableau de bord{(pend+uAdm)>0&&<span className="nc" style={{marginLeft:6}}>{pend+uAdm}</span>}
+            </button>
+            <div className="nav-user">
+              <div className="nav-av" style={{background:'var(--rd)'}}>🛡</div>
+              <span style={{fontSize:13}}>{ses.nom?.split(' ')[0]}</span>
+              <button className="nav-btn nb-ghost" onClick={logout} style={{fontSize:13}}>Déconnexion</button>
+            </div>
+          </>}
+          {ses?.role==='user'&&<>
+            <button className="nav-btn nb-ghost" onClick={()=>setPage('profile')}>Mon profil</button>
+            <button className="nav-btn nb-ghost" onClick={()=>setPage('mymessages')}>
+              💬{uMe>0&&<span className="nc" style={{marginLeft:4}}>{uMe}</span>}
+            </button>
+            <div className="nav-user">
+              <div className="nav-av">{me?.prenom?.[0]}{me?.nom?.[0]}</div>
+              <button className="nav-btn nb-ghost" onClick={logout} style={{fontSize:13}}>⎋</button>
+            </div>
+          </>}
+        </div>
+      </nav>
+    );
+  }
+
+  return(
+    <div>
+      <Nav/>
+      {page==='home'       &&<HomePage setPage={setPage} ses={ses} users={users}/>}
+      {page==='login'      &&<LoginPage login={login} setPage={setPage} toast={toast}/>}
+      {page==='register'   &&<RegisterPage users={users} doAddUser={doAddUser} vilNames={vilNames} setPage={setPage} toast={toast}/>}
+      {page==='profile'    &&ses?.role==='user'&&me&&<ProfilePage user={me} doSaveUser={doSaveUser} vilNames={vilNames} setPage={setPage} toast={toast} msgs={msgs} doAddMsg={doAddMsg} doReadMsgs={doReadMsgs}/>}
+      {page==='mymessages' &&ses?.role==='user'&&me&&<MsgPage user={me} msgs={msgs} doAddMsg={doAddMsg} doReadMsgs={doReadMsgs}/>}
+      {page==='dashboard'  &&ses?.role==='admin'&&<Dashboard users={users} doSaveUser={doSaveUser} doDelUser={doDelUser} vils={vils} vilNames={vilNames} doAddVillage={doAddVillage} doDelVillage={doDelVillage} toast={toast} msgs={msgs} doAddMsg={doAddMsg} doReadMsgs={doReadMsgs} logs={logs} doLoadLogs={doLoadLogs}/>}
+      {!ses&&page==='dashboard'&&<LoginPage login={login} setPage={setPage} toast={toast} forceAdmin/>}
+      <Toasts list={toasts}/>
+    </div>
+  );
+}
+
+/* ══════════════ HOME ══════════════ */
+function HomePage({setPage,ses,users}){
+  const ok=users.filter(u=>u.status==='approved');
+  return(
+    <div>
+      <div className="hero">
+        <div className="hero-badge">🇧🇯 Arrondissement d'Avlékété · Commune de Ouidah</div>
+        <h1>Répertoire Numérique de la<br/><span>Jeunesse d'Avlékété</span></h1>
+        <p>Plateforme centralisée pour recenser, connecter et accompagner les jeunes de l'arrondissement vers l'emploi et les programmes de développement.</p>
+        <div className="hero-btns">
+          {!ses&&<button className="btn-primary" onClick={()=>setPage('register')}>✦ S'inscrire maintenant</button>}
+          {ses?.role==='user'&&<button className="btn-primary" onClick={()=>setPage('profile')}>Mon profil</button>}
+          {ses?.role==='admin'&&<button className="btn-primary" onClick={()=>setPage('dashboard')}>Tableau de bord</button>}
+          {!ses&&<button className="btn-outline" onClick={()=>setPage('login')}>Se connecter</button>}
+        </div>
+      </div>
+      <div className="page">
+        <div className="stats-bar">
+          <div><div className="stat-num">{ok.length}</div><div className="stat-lbl">Jeunes inscrits</div></div>
+          <div className="stat-div"/>
+          <div><div className="stat-num">{VILLES_DEF.length}</div><div className="stat-lbl">Villages couverts</div></div>
+          <div className="stat-div"/>
+          <div><div className="stat-num">{ok.filter(u=>u.sexe==='Féminin').length}</div><div className="stat-lbl">Jeunes femmes</div></div>
+          <div className="stat-div"/>
+          <div><div className="stat-num">{ok.filter(u=>['Emploi salarié','Emploi indépendant'].includes(u.situation)).length}</div><div className="stat-lbl">En emploi</div></div>
+        </div>
+        <div className="section">
+          <div className="sec-title">Dernières inscriptions</div>
+          <div className="sec-sub">Jeunes récemment enregistrés dans le répertoire</div>
+          {ok.length===0
+            ?<div className="es"><div style={{fontSize:48,marginBottom:16}}>👥</div><div style={{fontWeight:600,fontSize:16}}>Aucun profil pour l'instant</div><div style={{color:'var(--tl)',marginTop:8,fontSize:14}}>Soyez le premier à vous inscrire !</div></div>
+            :<div className="g3">{ok.slice(0,6).map(u=><MiniCard key={u.id} u={u}/>)}</div>}
+        </div>
+        {!ses&&(
+          <div style={{background:'linear-gradient(135deg,#1a3d2b,#2d6a4f)',borderRadius:20,padding:'40px',textAlign:'center',marginBottom:48}}>
+            <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.5rem',color:'#fff',marginBottom:12}}>Vous êtes jeune d'Avlékété ?</div>
+            <p style={{color:'rgba(255,255,255,.7)',marginBottom:24,fontSize:15,maxWidth:480,margin:'0 auto 24px'}}>Rejoignez le répertoire pour être visible auprès des employeurs et des programmes de développement.</p>
+            <button className="btn-primary" onClick={()=>setPage('register')}>Créer mon profil gratuitement →</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function MiniCard({u}){
+  return(
+    <div className="pc">
+      <div className="pc-h">
+        <div className="pc-av">{u.prenom[0]}{u.nom[0]}</div>
+        <div><div className="pc-name">{u.prenom} {u.nom}</div><div className="pc-vil">📍 {u.village}</div></div>
+      </div>
+      <div className="pc-body">
+        <span className={`badge ${bcl(u.situation)}`}>{u.situation}</span>
+        <div style={{fontSize:13,color:'var(--tl)',lineHeight:2}}>
+          <div>Niveau : <span style={{color:'var(--td)',fontWeight:500}}>{u.niveau||'—'}</span></div>
+          <div>Métier : <span style={{color:'var(--td)',fontWeight:500}}>{u.profession||'—'}</span></div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════ LOGIN ══════════════ */
+function LoginPage({login,setPage,toast,forceAdmin}){
+  const [role,setRole]=useState(forceAdmin?'admin':'user');
+  const [id,  setId]  =useState('');
+  const [pwd, setPwd] =useState('');
+  const [load,setLoad]=useState(false);
+  const [err, setErr] =useState('');
+  const [show,setShow]=useState(false);
+
+  const doLogin=async()=>{
+    if(!id.trim()||!pwd){setErr('Remplissez tous les champs.');return;}
+    setErr('');setLoad(true);
+    try{
+      const ok=await login(id.trim(),pwd,role);
+      if(ok===true){toast('Bienvenue !','success');setPage(role==='admin'?'dashboard':'profile');}
+      else if(ok==='pending')setErr('Votre dossier est en attente de validation par un responsable.');
+      else setErr(role==='admin'?'Identifiants administrateur incorrects.':'CIP ou mot de passe invalide.');
+    }catch{setErr('Erreur réseau — réessayez.');}
+    setLoad(false);
+  };
+
+  return(
+    <div className="lp">
+      <div className="lc">
+        <div className="ll">
+          <div className="ll-ic">A</div>
+          <div className="ll-t">Connexion</div>
+          <div className="ll-s">Répertoire de la Jeunesse d'Avlékété</div>
+        </div>
+        {!forceAdmin&&(
+          <div className="rt">
+            {[['user','👤','Jeune'],['admin','🛡️','Administrateur']].map(([r,ic,lb])=>(
+              <div key={r} className={`rt-t ${role===r?'on':''}`} onClick={()=>{setRole(r);setErr('');setId('');setPwd('');}}>
+                <div className="rt-ic">{ic}</div>{lb}
+              </div>
+            ))}
+          </div>
+        )}
+        {role==='admin'&&<div className="al">🔒 Accès réservé aux responsables autorisés.</div>}
+        <div className="fg">
+          <label className="fl">{role==='admin'?'Identifiant administrateur':'Numéro CIP'}</label>
+          <input className="fi" value={id} onChange={e=>setId(e.target.value)} placeholder={role==='admin'?'admin':'CIP001234'} onKeyDown={e=>e.key==='Enter'&&doLogin()}/>
+        </div>
+        <div className="fg">
+          <label className="fl">Mot de passe</label>
+          <div style={{position:'relative'}}>
+            <input className="fi" type={show?'text':'password'} value={pwd} onChange={e=>setPwd(e.target.value)} placeholder="••••••••" onKeyDown={e=>e.key==='Enter'&&doLogin()}/>
+            <span style={{position:'absolute',right:12,top:'50%',transform:'translateY(-50%)',cursor:'pointer',fontSize:16,userSelect:'none'}} onClick={()=>setShow(s=>!s)}>{show?'🙈':'👁'}</span>
+          </div>
+        </div>
+        {err&&<div style={{background:'#fee2e2',color:'#991b1b',padding:'10px 14px',borderRadius:8,fontSize:13,marginBottom:16}}>{err}</div>}
+        <button className="btn btn-g" style={{width:'100%',justifyContent:'center',cursor:'pointer'}} onClick={doLogin} disabled={load}>
+          {load?<div className="sp"></div>:'🔐 Se connecter'}
+        </button>
+        {!forceAdmin&&role==='user'&&(
+          <div style={{marginTop:20,textAlign:'center',fontSize:13,color:'var(--tl)'}}>
+            Pas encore inscrit ?{' '}
+            <span style={{color:'var(--gm)',fontWeight:600,cursor:'pointer',textDecoration:'underline'}} onClick={()=>setPage('register')}>Créer un compte</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════ REGISTER ══════════════ */
+function RegisterPage({users,doAddUser,vilNames,setPage,toast}){
+  const [step,setStep]=useState(1);
+  const [f,setF]=useState({nom:'',prenom:'',sexe:'',dob:'',cip:'',tel:'',email:'',niveau:'',diplomes:'',competences:'',situation:'',profession:'',village:'',biographie:'',password:'',confirmPwd:''});
+  const [e,setE]=useState({});
+  const [load,setLoad]=useState(false);
+  const [files,setFiles]=useState([]);
+  const fRef=useRef();
+
+  const set=(k,v)=>setF(x=>({...x,[k]:v}));
+  const fe=k=>e[k]?<div className="fe">{e[k]}</div>:null;
+  const fc=k=>`fi${e[k]?' er':''}`;
+  const sc=k=>`fs${e[k]?' er':''}`;
+
+  const v1=()=>{
+    const r={};
+    if(!f.nom.trim())r.nom='Nom requis';
+    if(!f.prenom.trim())r.prenom='Prénom requis';
+    if(!f.sexe)r.sexe='Sexe requis';
+    if(!f.dob)r.dob='Date requise';
+    else{const a=age(f.dob);if(a<15)r.dob='Minimum 15 ans';if(a>35)r.dob='Maximum 35 ans';}
+    if(!f.cip.trim())r.cip='CIP requis';
+    else if(users.find(u=>u.cip===f.cip.trim()))r.cip='Ce CIP est déjà enregistré';
+    if(!f.tel.trim())r.tel='Téléphone requis';
+    else if(!/^\d{8}$/.test(f.tel.trim()))r.tel='8 chiffres requis';
+    setE(r);return!Object.keys(r).length;
+  };
+  const v2=()=>{
+    const r={};
+    if(!f.niveau)r.niveau='Requis';if(!f.situation)r.situation='Requis';
+    if(!f.profession)r.profession='Requis';if(!f.village)r.village='Requis';
+    setE(r);return!Object.keys(r).length;
+  };
+  const v3=()=>{
+    const r={};
+    if(!f.password)r.password='Requis';
+    else if(f.password.length<8)r.password='8 caractères min';
+    else if(!/[A-Z]/.test(f.password))r.password='1 majuscule requise';
+    else if(!/[0-9]/.test(f.password))r.password='1 chiffre requis';
+    if(f.password!==f.confirmPwd)r.confirmPwd='Mots de passe différents';
+    setE(r);return!Object.keys(r).length;
+  };
+
+  const next=()=>{if(step===1&&v1())setStep(2);else if(step===2&&v2())setStep(3);};
+
+  const hFiles=async ev=>{
+    const arr=Array.from(ev.target.files).filter(x=>['application/pdf','image/jpeg','image/png','image/jpg'].includes(x.type)&&x.size<600*1024);
+    const done=await Promise.all(arr.map(async x=>({name:x.name,size:x.size,type:x.type,data:await f2b64(x),at:new Date().toISOString()})));
+    setFiles(p=>[...p,...done].slice(0,5));
+  };
+
+  const submit=async()=>{
+    if(!v3())return;
+    setLoad(true);
+    try{
+      const newJ=await DB.addJeune({nom:f.nom.trim(),prenom:f.prenom.trim(),sexe:f.sexe,dob:f.dob,cip:f.cip.trim(),tel:f.tel.trim(),email:f.email.trim()||null,niveau:f.niveau,situation:f.situation,profession:f.profession,village:f.village,competences:f.competences||null,diplomes:f.diplomes||null,biographie:f.biographie||null,status:'pending',files});
+      await DB.addAccount({cip:f.cip.trim(),passwordHash:await hashPwd(f.password),userId:newJ.id});
+      await DB.log(`Nouvelle inscription : ${f.prenom} ${f.nom} (${f.village})`,'register');
+      doAddUser(newJ);
+      toast('✓ Inscription envoyée ! En attente de validation.','success');
+      setPage('login');
+    }catch(err){toast('Erreur : '+err.message,'error');}
+    setLoad(false);
+  };
+
+  const STS=['Identité','Parcours','Documents & Sécurité'];
+  return(
+    <div className="page" style={{maxWidth:720,paddingTop:40,paddingBottom:60}}>
+      <div style={{marginBottom:28}}>
+        <div className="sec-title">Inscription au Répertoire</div>
+        <div className="sec-sub">Arrondissement d'Avlékété · Commune de Ouidah</div>
+      </div>
+      <div style={{background:'rgba(30,96,145,.07)',border:'1px solid rgba(30,96,145,.18)',borderRadius:10,padding:'12px 16px',marginBottom:24,fontSize:13,color:'#1e6091',display:'flex',gap:10}}>
+        <span>ℹ️</span><span>Votre inscription sera validée par un responsable avant activation.</span>
+      </div>
+      <div className="steps">
+        {STS.map((s,i)=>(
+          <div key={s} className={`step ${step===i+1?'on':step>i+1?'dn':''}`}>
+            <div className="step-c">{step>i+1?'✓':i+1}</div>
+            <div className="step-l">{s}</div>
+          </div>
+        ))}
+      </div>
+      <div className="card">
+        {step===1&&(
+          <>
+            <div className="fsec">Informations personnelles</div>
+            <div className="g2">
+              <div className="fg"><label className="fl">Nom <span>*</span></label><input className={fc('nom')} value={f.nom} onChange={e=>set('nom',e.target.value)} placeholder="AHOUANDJINOU"/>{fe('nom')}</div>
+              <div className="fg"><label className="fl">Prénom <span>*</span></label><input className={fc('prenom')} value={f.prenom} onChange={e=>set('prenom',e.target.value)} placeholder="Kofi"/>{fe('prenom')}</div>
+            </div>
+            <div className="g2">
+              <div className="fg">
+                <label className="fl">Sexe <span>*</span></label>
+                <select className={sc('sexe')} value={f.sexe} onChange={e=>set('sexe',e.target.value)}>
+                  <option value="">-- Sélectionner --</option><option>Masculin</option><option>Féminin</option>
+                </select>{fe('sexe')}
+              </div>
+              <div className="fg"><label className="fl">Date de naissance <span>*</span></label><input className={fc('dob')} type="date" value={f.dob} onChange={e=>set('dob',e.target.value)} max={new Date().toISOString().split('T')[0]}/>{fe('dob')}<div className="fh">15 à 35 ans</div></div>
+            </div>
+            <div className="g2">
+              <div className="fg"><label className="fl">Numéro CIP <span>*</span></label><input className={fc('cip')} value={f.cip} onChange={e=>set('cip',e.target.value)} placeholder="CIP123456"/>{fe('cip')}</div>
+              <div className="fg"><label className="fl">Téléphone WhatsApp <span>*</span></label><input className={fc('tel')} value={f.tel} onChange={e=>set('tel',e.target.value)} placeholder="97123456" maxLength={8}/>{fe('tel')}<div className="fh">8 chiffres — numéro WhatsApp actif</div></div>
+            </div>
+            <div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={f.email} onChange={e=>set('email',e.target.value)} placeholder="exemple@email.com (optionnel)"/></div>
+          </>
+        )}
+        {step===2&&(
+          <>
+            <div className="fsec">Parcours & Localisation</div>
+            <div className="g2">
+              <div className="fg"><label className="fl">Niveau d'étude <span>*</span></label><select className={sc('niveau')} value={f.niveau} onChange={e=>set('niveau',e.target.value)}><option value="">-- Sélectionner --</option>{NIVEAUX.map(n=><option key={n}>{n}</option>)}</select>{fe('niveau')}</div>
+              <div className="fg"><label className="fl">Situation professionnelle <span>*</span></label><select className={sc('situation')} value={f.situation} onChange={e=>set('situation',e.target.value)}><option value="">-- Sélectionner --</option>{SITUATIONS.map(s=><option key={s}>{s}</option>)}</select>{fe('situation')}</div>
+            </div>
+            <div className="g2">
+              <div className="fg"><label className="fl">Domaine / Profession <span>*</span></label><select className={sc('profession')} value={f.profession} onChange={e=>set('profession',e.target.value)}><option value="">-- Sélectionner --</option>{PROFESSIONS.map(p=><option key={p}>{p}</option>)}</select>{fe('profession')}</div>
+              <div className="fg"><label className="fl">Village / Quartier <span>*</span></label><select className={sc('village')} value={f.village} onChange={e=>set('village',e.target.value)}><option value="">-- Sélectionner --</option>{vilNames.map(v=><option key={v}>{v}</option>)}</select>{fe('village')}</div>
+            </div>
+            <div className="fg"><label className="fl">Diplômes obtenus</label><textarea className="fta" value={f.diplomes} onChange={e=>set('diplomes',e.target.value)} placeholder="Ex : Licence en Informatique – UAC 2021"/></div>
+            <div className="fg"><label className="fl">Compétences</label><input className="fi" value={f.competences} onChange={e=>set('competences',e.target.value)} placeholder="Ex : Couture, Informatique, Commerce (séparées par des virgules)"/></div>
+            <div className="fg"><label className="fl">Biographie courte</label><textarea className="fta" value={f.biographie} onChange={e=>set('biographie',e.target.value)} placeholder="Présentez-vous en quelques lignes…"/></div>
+          </>
+        )}
+        {step===3&&(
+          <>
+            <div className="fsec">Documents & Mot de passe</div>
+            <div className="fg">
+              <label className="fl">Pièces justificatives (optionnel)</label>
+              <div className="upz" onClick={()=>fRef.current?.click()}>
+                <div style={{fontSize:28,marginBottom:8}}>📎</div>
+                <div style={{fontSize:14,color:'var(--tm)'}}>Cliquez pour ajouter des documents</div>
+                <div style={{fontSize:12,color:'var(--tl)',marginTop:4}}>PDF, JPG, PNG · Max 600 Ko · 5 fichiers max</div>
+              </div>
+              <input ref={fRef} type="file" multiple accept=".pdf,.jpg,.jpeg,.png" style={{display:'none'}} onChange={hFiles}/>
+              {files.length>0&&<div style={{marginTop:10,display:'flex',flexWrap:'wrap',gap:8}}>{files.map((x,i)=><span key={i} className="file-chip">📄 {x.name}<span className="file-x" onClick={()=>setFiles(p=>p.filter((_,j)=>j!==i))}>×</span></span>)}</div>}
+            </div>
+            <div className="fg"><label className="fl">Mot de passe <span>*</span></label><input className={fc('password')} type="password" value={f.password} onChange={e=>set('password',e.target.value)} placeholder="8 car. min, 1 majuscule, 1 chiffre"/>{fe('password')}</div>
+            <div className="fg"><label className="fl">Confirmer le mot de passe <span>*</span></label><input className={fc('confirmPwd')} type="password" value={f.confirmPwd} onChange={e=>set('confirmPwd',e.target.value)} placeholder="Répétez le mot de passe"/>{fe('confirmPwd')}</div>
+            <div style={{background:'var(--cr)',padding:16,borderRadius:10,fontSize:13,lineHeight:2}}>
+              <strong>Récapitulatif :</strong><br/>
+              👤 {f.prenom} {f.nom} · {f.sexe}{f.dob?` · ${age(f.dob)} ans`:''}<br/>
+              📍 {f.village} · 🎓 {f.niveau} · 💼 {f.profession}
+            </div>
+          </>
+        )}
+        <div style={{display:'flex',gap:12,justifyContent:'space-between',marginTop:28,flexWrap:'wrap'}}>
+          {step>1&&<button className="btn btn-gh" onClick={()=>setStep(s=>s-1)}>← Précédent</button>}
+          {step<3
+            ?<button className="btn btn-g" style={{marginLeft:'auto'}} onClick={next}>Suivant →</button>
+            :<button className="btn btn-go" style={{marginLeft:'auto'}} onClick={submit} disabled={load}>
+              {load?<><div className="sp dk"></div> Envoi…</>:'✓ Soumettre mon inscription'}
+            </button>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════ PROFILE ══════════════ */
+function ProfilePage({user,doSaveUser,vilNames,setPage,toast,msgs,doAddMsg,doReadMsgs}){
+  const [editing,setEditing]=useState(false);
+  const [f,setF]=useState({...user});
+  const [tab,setTab]=useState('info');
+  const [saving,setSaving]=useState(false);
+
+  const sf=(k,v)=>setF(x=>({...x,[k]:v}));
+  const a=age(user.dob);
+  const myMsgs=msgs.filter(m=>m.toUserId===user.id);
+  const unread=myMsgs.filter(m=>!m.readByUser).length;
+
+  const save=async()=>{
+    setSaving(true);
+    try{
+      await doSaveUser(user.id,{nom:f.nom,prenom:f.prenom,tel:f.tel,email:f.email,niveau:f.niveau,situation:f.situation,profession:f.profession,village:f.village,competences:f.competences,diplomes:f.diplomes,biographie:f.biographie});
+      setEditing(false);toast('Profil mis à jour !','success');
+    }catch(err){toast('Erreur : '+err.message,'error');}
+    setSaving(false);
+  };
+
+  const onSend=async text=>{await doAddMsg({toUserId:user.id,text,from:'user',readByAdmin:false,readByUser:true});};
+
+  useEffect(()=>{
+    if(tab==='msgs'){
+      const ids=myMsgs.filter(m=>!m.readByUser&&m.from==='admin').map(m=>m.id);
+      if(ids.length)doReadMsgs(ids,'readByUser');
+    }
+  },[tab]);
+
+  if(user.status==='pending')return(
+    <div className="page" style={{paddingTop:80,textAlign:'center',maxWidth:500}}>
+      <div style={{fontSize:60,marginBottom:20}}>⏳</div>
+      <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.4rem',color:'var(--gd)',marginBottom:12}}>Inscription en attente</div>
+      <p style={{color:'var(--tl)',lineHeight:1.8}}>Un responsable examinera votre dossier et activera votre compte. Vous pourrez ensuite vous connecter normalement.</p>
+    </div>
+  );
+
+  return(
+    <div className="page" style={{paddingTop:40,paddingBottom:60}}>
+      <div style={{background:'linear-gradient(135deg,var(--gd),var(--gm))',borderRadius:20,padding:32,marginBottom:24,display:'flex',alignItems:'center',gap:24,flexWrap:'wrap'}}>
+        <div style={{width:80,height:80,borderRadius:'50%',background:'var(--go)',display:'flex',alignItems:'center',justifyContent:'center',fontFamily:'Playfair Display,serif',fontWeight:700,color:'var(--gd)',fontSize:32,flexShrink:0}}>{user.prenom[0]}{user.nom[0]}</div>
+        <div style={{flex:1}}>
+          <div style={{fontFamily:'Playfair Display,serif',fontSize:'1.6rem',color:'#fff'}}>{user.prenom} {user.nom}</div>
+          <div style={{color:'rgba(255,255,255,.7)',fontSize:14,marginTop:4}}>📍 {user.village} · 🎂 {a} ans · CIP : {user.cip}</div>
+          <span className={`badge ${bcl(user.situation)}`} style={{marginTop:10}}>{user.situation}</span>
+        </div>
+        {!editing&&<button className="btn" style={{background:'rgba(255,255,255,.15)',color:'#fff',cursor:'pointer'}} onClick={()=>{setF({...user});setEditing(true);}}>✏️ Modifier</button>}
+      </div>
+      <div className="tabs">
+        <button className={`tab ${tab==='info'?'on':''}`} onClick={()=>setTab('info')}>Informations</button>
+        <button className={`tab ${tab==='docs'?'on':''}`} onClick={()=>setTab('docs')}>Documents</button>
+        <button className={`tab ${tab==='msgs'?'on':''}`} onClick={()=>setTab('msgs')}>
+          Messages {unread>0&&<span className="nc" style={{marginLeft:4}}>{unread}</span>}
+        </button>
+      </div>
+      {tab==='info'&&!editing&&(
+        <div className="g2">
+          <div className="card">
+            <div className="card-t">Informations personnelles</div>
+            <div style={{lineHeight:2.3,fontSize:14}}>
+              {[['Nom complet',`${user.prenom} ${user.nom}`],['Sexe',user.sexe],['Âge',`${a} ans`],['CIP',user.cip],['Téléphone',user.tel],['Email',user.email||'—'],['Village',user.village]].map(([l,v])=>(
+                <div key={l} style={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid var(--cd)',paddingBottom:2}}>
+                  <span style={{color:'var(--tl)'}}>{l}</span>
+                  <span style={{fontWeight:600}}>{l==='Village'?<span className="vc">📍 {v}</span>:v}</span>
+                </div>
+              ))}
+              {user.tel&&<div style={{marginTop:14}}><a href={waL(user.tel)} target="_blank" rel="noopener noreferrer" className="btn btn-wa btn-sm">💬 Ouvrir WhatsApp</a></div>}
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-t">Parcours professionnel</div>
+            <div style={{lineHeight:2.3,fontSize:14,marginBottom:14}}>
+              {[['Niveau',user.niveau||'—'],['Situation',user.situation||'—'],['Profession',user.profession||'—']].map(([l,v])=>(
+                <div key={l} style={{display:'flex',justifyContent:'space-between',borderBottom:'1px solid var(--cd)',paddingBottom:2}}>
+                  <span style={{color:'var(--tl)'}}>{l}</span><span style={{fontWeight:600}}>{v}</span>
+                </div>
+              ))}
+            </div>
+            {user.diplomes&&<div style={{marginBottom:12}}><div style={{fontSize:12,fontWeight:600,color:'var(--gm)',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:6}}>Diplômes</div><div style={{fontSize:13,color:'var(--tm)',lineHeight:1.6}}>{user.diplomes}</div></div>}
+            {user.competences&&<div style={{marginBottom:12}}><div style={{fontSize:12,fontWeight:600,color:'var(--gm)',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:8}}>Compétences</div><div style={{display:'flex',flexWrap:'wrap',gap:8}}>{user.competences.split(',').map(c=><span key={c} style={{background:'rgba(82,183,136,.12)',color:'var(--gd)',padding:'4px 12px',borderRadius:100,fontSize:13}}>{c.trim()}</span>)}</div></div>}
+            {user.biographie&&<div><div style={{fontSize:12,fontWeight:600,color:'var(--gm)',textTransform:'uppercase',letterSpacing:'.06em',marginBottom:6}}>Biographie</div><div style={{fontSize:13,color:'var(--tm)',lineHeight:1.6}}>{user.biographie}</div></div>}
+          </div>
+        </div>
+      )}
+      {tab==='info'&&editing&&(
+        <div className="card">
+          <div className="card-t">Modifier mon profil</div>
+          <div className="g2">
+            <div className="fg"><label className="fl">Nom</label><input className="fi" value={f.nom||''} onChange={e=>sf('nom',e.target.value)}/></div>
+            <div className="fg"><label className="fl">Prénom</label><input className="fi" value={f.prenom||''} onChange={e=>sf('prenom',e.target.value)}/></div>
+          </div>
+          <div className="g2">
+            <div className="fg"><label className="fl">Téléphone WhatsApp</label><input className="fi" value={f.tel||''} onChange={e=>sf('tel',e.target.value)}/></div>
+            <div className="fg"><label className="fl">Email</label><input className="fi" type="email" value={f.email||''} onChange={e=>sf('email',e.target.value)}/></div>
+          </div>
+          <div className="g2">
+            <div className="fg"><label className="fl">Niveau</label><select className="fs" value={f.niveau||''} onChange={e=>sf('niveau',e.target.value)}>{NIVEAUX.map(n=><option key={n}>{n}</option>)}</select></div>
+            <div className="fg"><label className="fl">Situation</label><select className="fs" value={f.situation||''} onChange={e=>sf('situation',e.target.value)}>{SITUATIONS.map(s=><option key={s}>{s}</option>)}</select></div>
+          </div>
+          <div className="g2">
+            <div className="fg"><label className="fl">Profession</label><select className="fs" value={f.profession||''} onChange={e=>sf('profession',e.target.value)}>{PROFESSIONS.map(p=><option key={p}>{p}</option>)}</select></div>
+            <div className="fg"><label className="fl">Village</label><select className="fs" value={f.village||''} onChange={e=>sf('village',e.target.value)}>{vilNames.map(v=><option key={v}>{v}</option>)}</select></div>
+          </div>
+          <div className="fg"><label className="fl">Compétences</label><input className="fi" value={f.competences||''} onChange={e=>sf('competences',e.target.value)}/></div>
+          <div className="fg"><label className="fl">Diplômes</label><textarea className="fta" value={f.diplomes||''} onChange={e=>sf('diplomes',e.target.value)}/></div>
+          <div className="fg"><label className="fl">Biographie</label><textarea className="fta" value={f.biographie||''} onChange={e=>sf('biographie',e.target.value)}/></div>
+          <div style={{display:'flex',gap:12,marginTop:16}}>
+            <button className="btn btn-g" onClick={save} disabled={saving}>{saving?<div className="sp"></div>:'✓ Enregistrer'}</button>
+            <button className="btn btn-gh" onClick={()=>setEditing(false)}>Annuler</button>
+          </div>
+        </div>
+      )}
+      {tab==='docs'&&(
+        <div className="card">
+          <div className="card-t">Mes documents</div>
+          <div className="card-s">Fichiers soumis lors de l'inscription</div>
+          {(!user.files||user.files.length===0)
+            ?<div className="es"><div style={{fontSize:40}}>📂</div><div style={{fontWeight:600,marginTop:12}}>Aucun document</div></div>
+            :<div style={{display:'flex',flexWrap:'wrap',gap:12}}>{user.files.map((x,i)=><a key={i} href={x.data} download={x.name} className="btn btn-gh">📄 {x.name}</a>)}</div>}
+        </div>
+      )}
+      {tab==='msgs'&&<ChatBox msgs={myMsgs} onSend={onSend} isAdmin={false}/>}
+    </div>
+  );
+}
+
+/* ══════════════ MY MESSAGES ══════════════ */
+function MsgPage({user,msgs,doAddMsg,doReadMsgs}){
+  const myMsgs=msgs.filter(m=>m.toUserId===user.id);
+  useEffect(()=>{const ids=myMsgs.filter(m=>!m.readByUser&&m.from==='admin').map(m=>m.id);if(ids.length)doReadMsgs(ids,'readByUser');},[]);
+  const onSend=async t=>await doAddMsg({toUserId:user.id,text:t,from:'user',readByAdmin:false,readByUser:true});
+  return(
+    <div className="page" style={{paddingTop:40,paddingBottom:60,maxWidth:720}}>
+      <div className="sec-title" style={{marginBottom:8}}>Mes messages</div>
+      <div className="sec-sub" style={{marginBottom:24}}>Conversations avec les responsables</div>
+      <ChatBox msgs={myMsgs} onSend={onSend} isAdmin={false}/>
+    </div>
+  );
+}
+
+/* ══════════════ CHATBOX ══════════════ */
+function ChatBox({msgs,onSend,isAdmin}){
+  const [inp,setInp]=useState('');
+  const [send,setSend]=useState(false);
+  const bot=useRef();
+  useEffect(()=>bot.current?.scrollIntoView({behavior:'smooth'}),[msgs]);
+  const go=async()=>{
+    if(!inp.trim()||send)return;
+    setSend(true);try{await onSend(inp.trim());setInp('');}catch(e){console.error(e);}setSend(false);
+  };
+  return(
+    <div className="cc">
+      <div className="cm">
+        {msgs.length===0&&<div style={{textAlign:'center',color:'var(--tl)',fontSize:13,margin:'auto'}}>Aucun message pour l'instant</div>}
+        {msgs.map(m=>(
+          <div key={m.id} className={`cb ${m.from==='admin'?(isAdmin?'s':'r'):(isAdmin?'r':'s')}`}>
+            {m.text}
+            <div className="cb-m">{new Date(m.at).toLocaleString('fr-FR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})}</div>
+          </div>
+        ))}
+        <div ref={bot}/>
+      </div>
+      <div className="ci-r">
+        <input className="ci" value={inp} onChange={e=>setInp(e.target.value)} placeholder="Écrire un message…" onKeyDown={e=>e.key==='Enter'&&!e.shiftKey&&go()}/>
+        <button className="btn btn-g btn-sm" onClick={go} disabled={send}>{send?<div className="sp" style={{width:14,height:14,borderWidth:2}}></div>:'Envoyer'}</button>
+      </div>
+    </div>
+  );
+}
+
+/* ══════════════ DASHBOARD ══════════════ */
+function Dashboard({users,doSaveUser,doDelUser,vils,vilNames,doAddVillage,doDelVillage,toast,msgs,doAddMsg,doReadMsgs,logs,doLoadLogs}){
+  const [tab,setTab]=useState('overview');
+  const [q,setQ]=useState('');
+  const [fV,setFV]=useState('');const [fS,setFS]=useState('');const [fN,setFN]=useState('');
+  const [fSx,setFSx]=useState('');const [fP,setFP]=useState('');const [fSt,setFSt]=useState('approved');
+  const [viewU,setViewU]=useState(null);const [msgU,setMsgU]=useState(null);
+  const [newV,setNewV]=useState('');const [act,setAct]=useState({});const [lOk,setLOk]=useState(false);
+
+  const ok=users.filter(u=>u.status==='approved');
+  const pnd=users.filter(u=>u.status==='pending');
+  const uAdm=msgs.filter(m=>!m.readByAdmin&&m.from==='user').length;
+
+  const fil=users.filter(u=>{
+    const mQ=!q||(u.nom+u.prenom+u.cip+(u.village||'')+(u.profession||'')).toLowerCase().includes(q.toLowerCase());
+    return mQ&&(!fV||u.village===fV)&&(!fS||u.situation===fS)&&(!fN||u.niveau===fN)&&(!fSx||u.sexe===fSx)&&(!fP||u.profession===fP)&&(!fSt||u.status===fSt);
+  });
+
+  const totalH=ok.filter(u=>u.sexe==='Masculin').length;
+  const totalF=ok.filter(u=>u.sexe==='Féminin').length;
+  const emp=ok.filter(u=>['Emploi salarié','Emploi indépendant'].includes(u.situation)).length;
+  const chom=ok.filter(u=>u.situation==='Chômage').length;
+
+  const do_=async(k,fn)=>{setAct(a=>({...a,[k]:true}));try{await fn();}catch(e){toast('Erreur : '+e.message,'error');}setAct(a=>({...a,[k]:false}));};
+  const approve=u=>do_(`a${u.id}`,async()=>{await doSaveUser(u.id,{status:'approved'});DB.log(`Approuvé : ${u.prenom} ${u.nom}`,'approve');toast(`${u.prenom} approuvé(e) !`,'success');if(viewU?.id===u.id)setViewU(v=>({...v,status:'approved'}));});
+  const reject=u=>do_(`r${u.id}`,async()=>{await doSaveUser(u.id,{status:'rejected'});DB.log(`Rejeté : ${u.prenom} ${u.nom}`,'reject');toast('Rejeté.','error');if(viewU?.id===u.id)setViewU(v=>({...v,status:'rejected'}));});
+  const del=async u=>{if(!confirm(`Supprimer ${u.prenom} ${u.nom} ?`))return;do_(`d${u.id}`,async()=>{await doDelUser(u.id);DB.log(`Supprimé : ${u.prenom} ${u.nom}`,'delete');toast('Supprimé.','error');if(viewU?.id===u.id)setViewU(null);});};
+
+  const csv=()=>{
+    const h=['Nom','Prénom','Sexe','D.naiss','CIP','Tel','Email','Niveau','Situation','Profession','Village','Statut'];
+    const rows=fil.map(u=>[u.nom,u.prenom,u.sexe,u.dob,u.cip,u.tel,u.email,u.niveau,u.situation,u.profession,u.village,u.status]);
+    const data=[h,...rows].map(r=>r.map(v=>`"${(v||'').replace(/"/g,'""')}"`).join(',')).join('\n');
+    const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+data],{type:'text/csv;charset=utf-8'}));a.download='repertoire-avlekete.csv';a.click();
+    toast('CSV téléchargé !','success');
+  };
+
+  const sendMsg=async text=>{
+    if(!msgU)return;
+    await doAddMsg({toUserId:msgU.id,text,from:'admin',readByAdmin:true,readByUser:false});
+    DB.log(`Message → ${msgU.prenom} ${msgU.nom}`,'message');
+    const ids=msgs.filter(m=>m.toUserId===msgU.id&&!m.readByAdmin&&m.from==='user').map(m=>m.id);
+    if(ids.length)await doReadMsgs(ids,'readByAdmin');
+  };
+
+  const TABS=[['overview','📊 Vue d\'ensemble'],['pending',`⏳ En attente${pnd.length?' ('+pnd.length+')':''}`],['liste','📋 Membres'],['messages',`💬 Messages${uAdm?' ('+uAdm+')':''}`],['villages','🏘️ Villages'],['activity','📜 Journal']];
+  const Sp=({k})=>act[k]?<div className="sp" style={{width:13,height:13,borderWidth:2}}></div>:null;
+
+  return(
+    <div>
+      <div className="dash-hd">
+        <div className="page">
+          <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:10}}><span style={{fontSize:20}}>🛡️</span><span className="sb-adm">Espace Administrateur Sécurisé</span></div>
+          <div className="dash-t">Tableau de bord</div>
+          <div className="dash-s">Arrondissement d'Avlékété · Commune de Ouidah · Bénin</div>
+        </div>
+      </div>
+      <div className="page" style={{marginTop:-32,paddingBottom:60}}>
+        <div className="kpi-g" style={{marginBottom:28}}>
+          {[[null,'👥',ok.length,'Membres actifs',vils.length+' villages'],['gold','👨',totalH,'Hommes',ok.length?Math.round(totalH/ok.length*100)+'%':'—'],['pink','👩',totalF,'Femmes',ok.length?Math.round(totalF/ok.length*100)+'%':'—'],['blue','💼',emp,'En emploi',ok.length?Math.round(emp/ok.length*100)+'%':'—'],['red','😔',chom,'Au chômage',ok.length?Math.round(chom/ok.length*100)+'%':'—'],['amb','⏳',pnd.length,'En attente','À valider']].map(([cl,ic,val,lb,tr])=>(
+            <div key={lb} className={`kpi${cl?' '+cl:''}`}>
+              <div className="kpi-ic">{ic}</div>
+              <div className="kpi-v">{val}</div>
+              <div className="kpi-l">{lb}</div>
+              <div className="kpi-tr">{tr}</div>
+            </div>
+          ))}
+        </div>
+        <div className="tabs">
+          {TABS.map(([k,l])=>(
+            <button key={k} className={`tab ${tab===k?'on':''}`} onClick={async()=>{setTab(k);if(k==='activity'&&!lOk){await doLoadLogs();setLOk(true);}}}>
+              {l}
+            </button>
+          ))}
+        </div>
+
+        {tab==='overview'&&(
+          <div>
+            <div className="g2" style={{marginBottom:24}}>
+              <div className="card"><div className="card-t">Sexe</div><div className="card-s">Distribution</div><div style={{height:240}}><Donut data={[{l:'Hommes',v:totalH,c:'#2d6a4f'},{l:'Femmes',v:totalF,c:'#d4a843'}]}/></div></div>
+              <div className="card"><div className="card-t">Situation professionnelle</div><div className="card-s">État d'emploi</div><div style={{height:240}}><Donut data={SITUATIONS.map(s=>({l:s,v:ok.filter(u=>u.situation===s).length,c:{'Emploi salarié':'#059669','Emploi indépendant':'#10b981','Chômage':'#ef4444','Stage':'#3b82f6','Formation':'#8b5cf6','Inactif':'#9ca3af'}[s]})).filter(d=>d.v>0)}/></div></div>
+            </div>
+            <div className="card" style={{marginBottom:24}}><div className="card-t">Par village</div><div style={{height:220}}><Bar data={vilNames.map(v=>({l:v.split(' ')[0],v:ok.filter(u=>u.village===v).length}))}/></div></div>
+            <div className="g2">
+              <div className="card"><div className="card-t">Niveau d'études</div><div style={{height:210}}><Bar data={NIVEAUX.map(n=>({l:n.split('(')[0].trim().slice(0,10),v:ok.filter(u=>u.niveau===n).length}))} c="#d4a843"/></div></div>
+              <div className="card"><div className="card-t">Top professions</div><div style={{height:210}}><Bar data={PROFESSIONS.map(p=>({l:p.split('/')[0].trim().slice(0,10),v:ok.filter(u=>u.profession===p).length})).filter(d=>d.v>0).sort((a,b)=>b.v-a.v).slice(0,7)} c="#1e6091"/></div></div>
+            </div>
+          </div>
+        )}
+
+        {tab==='pending'&&(
+          <div>
+            {pnd.length===0
+              ?<div className="es"><div style={{fontSize:48}}>✅</div><div style={{fontWeight:600,marginTop:16}}>Aucune inscription en attente</div></div>
+              :pnd.map(u=>(
+                <div key={u.id} className="card" style={{marginBottom:16,display:'flex',gap:16,alignItems:'center',flexWrap:'wrap'}}>
+                  <div style={{width:50,height:50,borderRadius:'50%',background:'var(--go)',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,color:'var(--gd)',fontSize:18,flexShrink:0}}>{u.prenom[0]}{u.nom[0]}</div>
+                  <div style={{flex:1,minWidth:200}}>
+                    <div style={{fontWeight:600,fontSize:15}}>{u.prenom} {u.nom}</div>
+                    <div style={{fontSize:13,color:'var(--tl)',marginTop:3}}>📍 {u.village} · 💼 {u.profession||'—'} · {age(u.dob)} ans · 📞 {u.tel}</div>
+                    <div style={{fontSize:13,color:'var(--tl)'}}>🎓 {u.niveau} · {u.situation}</div>
+                  </div>
+                  <div style={{display:'flex',gap:8,flexWrap:'wrap'}}>
+                    <button className="btn btn-gh btn-sm" onClick={()=>setViewU(u)}>👁 Dossier</button>
+                    <button className="btn btn-g btn-sm" onClick={()=>approve(u)} disabled={!!act[`a${u.id}`]}><Sp k={`a${u.id}`}/>✓ Approuver</button>
+                    <button className="btn btn-d btn-sm" onClick={()=>reject(u)} disabled={!!act[`r${u.id}`]}><Sp k={`r${u.id}`}/>✕ Rejeter</button>
+                  </div>
+                </div>
+              ))}
+          </div>
+        )}
+
+        {tab==='liste'&&(
+          <div>
+            <div className="sb">
+              <div className="si-w"><span className="si-ic">🔍</span><input className="si" placeholder="Nom, CIP, village, profession…" value={q} onChange={e=>setQ(e.target.value)}/></div>
+              <select className="fsel" value={fSt} onChange={e=>setFSt(e.target.value)}><option value="">Tous statuts</option><option value="approved">Approuvés</option><option value="pending">En attente</option><option value="rejected">Rejetés</option></select>
+              <select className="fsel" value={fV}  onChange={e=>setFV(e.target.value)}><option value="">Tous villages</option>{vilNames.map(v=><option key={v}>{v}</option>)}</select>
+              <select className="fsel" value={fS}  onChange={e=>setFS(e.target.value)}><option value="">Toutes situations</option>{SITUATIONS.map(s=><option key={s}>{s}</option>)}</select>
+              <select className="fsel" value={fP}  onChange={e=>setFP(e.target.value)}><option value="">Toutes professions</option>{PROFESSIONS.map(p=><option key={p}>{p}</option>)}</select>
+              <select className="fsel" value={fN}  onChange={e=>setFN(e.target.value)}><option value="">Tous niveaux</option>{NIVEAUX.map(n=><option key={n}>{n}</option>)}</select>
+              <select className="fsel" value={fSx} onChange={e=>setFSx(e.target.value)}><option value="">Tous sexes</option><option>Masculin</option><option>Féminin</option></select>
+              <button className="btn btn-go btn-sm" onClick={csv}>⬇ CSV</button>
+            </div>
+            <div style={{fontSize:13,color:'var(--tl)',marginBottom:12}}>{fil.length} résultat{fil.length!==1?'s':''}</div>
+            <div className="card" style={{padding:0}}>
+              <div className="tw">
+                <table>
+                  <thead><tr><th>Jeune</th><th>Village</th><th>Profession</th><th>Situation</th><th>WhatsApp</th><th>Statut</th><th>Actions</th></tr></thead>
+                  <tbody>
+                    {fil.length===0
+                      ?<tr><td colSpan={7}><div className="es"><div style={{fontSize:40}}>🔍</div><div style={{fontWeight:600,marginTop:12}}>Aucun résultat</div></div></td></tr>
+                      :fil.map(u=>(
+                        <tr key={u.id}>
+                          <td><div style={{display:'flex',alignItems:'center',gap:10}}>
+                            <div style={{width:34,height:34,borderRadius:'50%',background:'var(--gd)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:700,fontSize:13,flexShrink:0}}>{u.prenom[0]}{u.nom[0]}</div>
+                            <div><div style={{fontWeight:600,fontSize:14}}>{u.prenom} {u.nom}</div><div style={{fontSize:12,color:'var(--tl)'}}>{age(u.dob)} ans · {u.sexe}</div></div>
+                          </div></td>
+                          <td><span className="vc">📍 {u.village}</span></td>
+                          <td style={{fontSize:13}}>{u.profession||'—'}</td>
+                          <td><span className={`badge ${bcl(u.situation)}`} style={{marginBottom:0}}>{u.situation}</span></td>
+                          <td><a href={waL(u.tel)} target="_blank" rel="noopener noreferrer" style={{color:'#25d366',fontWeight:600,textDecoration:'none',fontSize:13}}>📱 {u.tel}</a></td>
+                          <td><span style={{fontSize:11,fontWeight:600,padding:'3px 10px',borderRadius:100,background:u.status==='approved'?'#d1fae5':u.status==='pending'?'#dbeafe':'#fee2e2',color:u.status==='approved'?'#065f46':u.status==='pending'?'#1e40af':'#991b1b'}}>{u.status==='approved'?'✓ Approuvé':u.status==='pending'?'⏳ Attente':'✕ Rejeté'}</span></td>
+                          <td><div style={{display:'flex',gap:5}}>
+                            <button className="btn btn-gh btn-sm" onClick={()=>setViewU(u)}>👁</button>
+                            <button className="btn btn-b btn-sm" onClick={()=>setMsgU(u)}>💬</button>
+                            {u.status==='pending'&&<button className="btn btn-g btn-sm" onClick={()=>approve(u)}>✓</button>}
+                            <button className="btn btn-d btn-sm" onClick={()=>del(u)}>✕</button>
+                          </div></td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {tab==='messages'&&(
+          <div>
+            <div style={{fontWeight:600,fontSize:16,marginBottom:16}}>Boîte de messagerie</div>
+            {users.filter(u=>u.status==='approved').map(u=>{
+              const uM=msgs.filter(m=>m.toUserId===u.id);
+              const ur=uM.filter(m=>!m.readByAdmin&&m.from==='user').length;
+              const last=uM[uM.length-1];
+              return(
+                <div key={u.id} className={`inb ${ur?'ur':''}`} onClick={()=>setMsgU(u)}>
+                  <div style={{width:42,height:42,borderRadius:'50%',background:'var(--gd)',display:'flex',alignItems:'center',justifyContent:'center',color:'#fff',fontWeight:700,fontSize:14,flexShrink:0}}>{u.prenom[0]}{u.nom[0]}</div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontWeight:600,fontSize:14}}>{u.prenom} {u.nom} <span style={{fontSize:12,color:'var(--tl)',fontWeight:400}}>· {u.profession||'—'}</span></div>
+                    <div style={{fontSize:12,color:'var(--tl)',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{last?last.text:'Aucun message'}</div>
+                  </div>
+                  {ur>0&&<span className="nc">{ur}</span>}
+                  <a href={waL(u.tel)} target="_blank" rel="noopener noreferrer" className="btn btn-wa btn-sm" onClick={e=>e.stopPropagation()}>WhatsApp</a>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {tab==='villages'&&(
+          <div>
+            <div className="card" style={{marginBottom:24}}>
+              <div className="card-t">Ajouter un village</div>
+              <div style={{display:'flex',gap:12,marginTop:14}}>
+                <input className="fi" value={newV} onChange={e=>setNewV(e.target.value)} placeholder="Nom du village ou quartier" style={{flex:1}} onKeyDown={async e=>{if(e.key==='Enter'&&newV.trim()){try{await doAddVillage(newV.trim());setNewV('');}catch(err){toast(err.message,'error');}}}}/>
+                <button className="btn btn-g" onClick={async()=>{if(!newV.trim())return;try{await doAddVillage(newV.trim());setNewV('');}catch(err){toast(err.message,'error');}}}>+ Ajouter</button>
+              </div>
+            </div>
+            <div className="g3">
+              {vils.map(v=>{
+                const cnt=users.filter(u=>u.village===v.nom&&u.status==='approved').length;
+                return(
+                  <div className="card" key={v.id} style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+                    <div><div style={{fontWeight:600}}>📍 {v.nom}</div><div style={{fontSize:13,color:'var(--tl)',marginTop:4}}>{cnt} jeune{cnt>1?'s':''}</div></div>
+                    <button className="btn btn-d btn-sm" onClick={async()=>{if(cnt>0){toast('Des membres sont dans ce village','error');return;}try{await doDelVillage(v.id);}catch(err){toast(err.message,'error');}}}>✕</button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {tab==='activity'&&(
+          <div className="card">
+            <div className="card-t">Journal d'activité</div>
+            <div className="card-s">100 dernières actions</div>
+            {logs.length===0
+              ?<div className="es"><div style={{fontSize:40}}>📜</div><div style={{fontWeight:600,marginTop:12}}>Aucune activité</div></div>
+              :logs.map(a=>(
+                <div key={a.id} className="act-i">
+                  <div className="act-d" style={{background:{admin:'var(--rd)',register:'var(--go)',approve:'var(--gl)',reject:'var(--rd)',delete:'var(--rd)',message:'var(--bl)'}[a.type]||'var(--gl)'}}></div>
+                  <div style={{flex:1}}><div style={{fontSize:14}}>{a.msg}</div><div style={{fontSize:12,color:'var(--tl)'}}>{new Date(a.at).toLocaleString('fr-FR')}</div></div>
+                </div>
+              ))}
+          </div>
+        )}
+      </div>
+
+      {viewU&&(
+        <div className="mo" onClick={()=>setViewU(null)}>
+          <div className="md" onClick={e=>e.stopPropagation()}>
+            <div className="md-h">
+              <div>
+                <div className="md-t">{viewU.prenom} {viewU.nom}</div>
+                <div style={{fontSize:13,color:'var(--tl)',marginTop:4}}>📍 {viewU.village} · {age(viewU.dob)} ans · {viewU.sexe}</div>
+              </div>
+              <button className="md-x" onClick={()=>setViewU(null)}>×</button>
+            </div>
+            <div className="md-b">
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'6px 24px',fontSize:14,lineHeight:2.2}}>
+                {[['CIP',viewU.cip],['Niveau',viewU.niveau],['Situation',viewU.situation],['Profession',viewU.profession||'—'],['Email',viewU.email||'—']].map(([l,v])=>(
+                  <div key={l}><span style={{color:'var(--tl)'}}>{l} : </span><strong>{v}</strong></div>
+                ))}
+              </div>
+              <div style={{marginTop:10}}><span style={{color:'var(--tl)'}}>Téléphone : </span><a href={waL(viewU.tel)} target="_blank" rel="noopener noreferrer" style={{color:'#25d366',fontWeight:700}}>📱 {viewU.tel}</a></div>
+              <div style={{marginTop:6}}><span style={{color:'var(--tl)'}}>Statut : </span><span style={{fontWeight:600,color:viewU.status==='approved'?'#065f46':viewU.status==='pending'?'#1e40af':'#991b1b'}}>{viewU.status==='approved'?'✓ Approuvé':viewU.status==='pending'?'⏳ En attente':'✕ Rejeté'}</span></div>
+              {viewU.diplomes&&<div style={{marginTop:14}}><strong>Diplômes :</strong><p style={{fontSize:13,color:'var(--tm)',marginTop:4,lineHeight:1.6}}>{viewU.diplomes}</p></div>}
+              {viewU.competences&&<div style={{marginTop:12}}><strong>Compétences :</strong><div style={{display:'flex',flexWrap:'wrap',gap:8,marginTop:8}}>{viewU.competences.split(',').map(c=><span key={c} style={{background:'rgba(82,183,136,.12)',color:'var(--gd)',padding:'4px 12px',borderRadius:100,fontSize:13}}>{c.trim()}</span>)}</div></div>}
+              {viewU.biographie&&<div style={{marginTop:12}}><strong>Biographie :</strong><p style={{fontSize:13,color:'var(--tm)',marginTop:4,lineHeight:1.6}}>{viewU.biographie}</p></div>}
+              {viewU.files?.length>0&&<div style={{marginTop:12}}><strong>Documents :</strong><div style={{display:'flex',flexWrap:'wrap',gap:8,marginTop:8}}>{viewU.files.map((x,i)=><a key={i} href={x.data} download={x.name} className="btn btn-gh btn-sm">📄 {x.name}</a>)}</div></div>}
+              <div style={{display:'flex',gap:10,marginTop:22,flexWrap:'wrap'}}>
+                <a href={waL(viewU.tel)} target="_blank" rel="noopener noreferrer" className="btn btn-wa btn-sm">💬 WhatsApp</a>
+                <button className="btn btn-b btn-sm" onClick={()=>{setMsgU(viewU);setViewU(null);}}>✉️ Message</button>
+                {viewU.status==='pending'&&<>
+                  <button className="btn btn-g btn-sm" onClick={()=>approve(viewU)} disabled={!!act[`a${viewU.id}`]}>✓ Approuver</button>
+                  <button className="btn btn-d btn-sm" onClick={()=>{reject(viewU);setViewU(null);}}>✕ Rejeter</button>
+                </>}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {msgU&&(
+        <div className="mo" onClick={()=>setMsgU(null)}>
+          <div className="md" onClick={e=>e.stopPropagation()}>
+            <div className="md-h">
+              <div>
+                <div className="md-t">Message → {msgU.prenom} {msgU.nom}</div>
+                <div style={{fontSize:13,color:'var(--tl)',marginTop:4}}>📍 {msgU.village} · 💼 {msgU.profession||'—'}</div>
+              </div>
+              <button className="md-x" onClick={()=>setMsgU(null)}>×</button>
+            </div>
+            <div className="md-b">
+              <div style={{marginBottom:14}}>
+                <a href={waL(msgU.tel)} target="_blank" rel="noopener noreferrer" className="btn btn-wa btn-sm">💬 WhatsApp ({msgU.tel})</a>
+              </div>
+              <ChatBox msgs={msgs.filter(m=>m.toUserId===msgU.id)} onSend={sendMsg} isAdmin={true}/>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ══════════════ GRAPHIQUES ══════════════ */
+function Donut({data}){
+  const ref=useRef();const cRef=useRef();
+  useEffect(()=>{
+    if(!ref.current)return;
+    if(cRef.current)cRef.current.destroy();
+    const total=data.reduce((s,d)=>s+d.v,0);
+    cRef.current=new Chart(ref.current,{type:'doughnut',data:{labels:data.map(d=>`${d.l} (${d.v})`),datasets:[{data:data.map(d=>d.v),backgroundColor:data.map(d=>d.c||'#9ca3af'),borderWidth:2,borderColor:'#fff',hoverOffset:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{family:'DM Sans',size:12},padding:12}},tooltip:{callbacks:{label:ctx=>`${ctx.label}: ${total?Math.round(ctx.parsed/total*100):0}%`}}}}});
+    return()=>cRef.current?.destroy();
+  },[data]);
+  return <canvas ref={ref}/>;
+}
+
+function Bar({data,c='#2d6a4f'}){
+  const ref=useRef();const cRef=useRef();
+  useEffect(()=>{
+    if(!ref.current)return;
+    if(cRef.current)cRef.current.destroy();
+    cRef.current=new Chart(ref.current,{type:'bar',data:{labels:data.map(d=>d.l),datasets:[{data:data.map(d=>d.v),backgroundColor:c+'cc',borderColor:c,borderWidth:1.5,borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,font:{family:'DM Sans',size:11}},grid:{color:'#f3f4f6'}},x:{ticks:{font:{family:'DM Sans',size:10},maxRotation:45},grid:{display:false}}}}});
+    return()=>cRef.current?.destroy();
+  },[data,c]);
+  return <canvas ref={ref}/>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Root/>);
+</script>
+</body>
+</html>
