@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://repertoire-avlekete.vercel.app/sitemap.xml
